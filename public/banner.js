@@ -1,0 +1,1 @@
+(async()=>{try{const r=await fetch('/banner-config.json?v='+Date.now(),{cache:'no-store'});if(!r.ok)return;const cfg=await r.json();if(!cfg.active)return;const img=document.querySelector('#promo-banner');img.src='/banner-actual.webp?v='+Date.now();img.onload=()=>{img.hidden=false};img.onerror=()=>{img.hidden=true}}catch(e){console.warn('Banner no disponible',e)}})();

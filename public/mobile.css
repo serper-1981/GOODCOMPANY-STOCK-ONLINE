@@ -1,0 +1,129 @@
+/* Sólo móvil: conservar intactos estilo de escritorio y franja verde de ofertas. */
+@media (max-width: 768px) {
+ .searchbox input, .tools select, input, select, textarea { font-size: 16px !important; }
+}
+
+/* V23: ajustes EXCLUSIVOS para celular. No afecta la versión de escritorio. */
+@media (max-width: 768px) {
+  main { width: calc(100% - 12px); }
+  .tools { display: grid; grid-template-columns: minmax(0, 1fr) minmax(116px, 38%); gap: 6px; }
+  .searchbox, .tools select { width: 100%; min-width: 0; }
+  .searchbox span { padding: 0 5px; font-size: 20px; }
+  .searchbox input { min-width: 0; padding: 10px 4px 10px 0; text-overflow: ellipsis; }
+  .tools select { padding: 8px 3px; }
+  .statusline { gap: 6px; }
+  .statusline p { overflow-wrap: anywhere; }
+
+  /* Dos columnas fijas: fotografía izquierda, ficha derecha. */
+  .item { grid-template-columns: minmax(0, 38%) minmax(0, 62%); margin-bottom: 8px; }
+  .visual { min-width: 0; padding: 6px; }
+  .photo { width: 100%; height: auto; object-fit: contain; }
+  .details { min-width: 0; padding: 9px 8px; overflow-wrap: anywhere; }
+  .details .line { font-size: 10px; line-height: 1.25; }
+  .details .code { font-size: 23px; line-height: 1.12; margin-bottom: 4px; }
+  .details .desc { font-size: 11.5px; line-height: 1.35; margin-bottom: 6px; }
+  .details .measure { font-size: 11px; line-height: 1.35; padding: 6px 0; }
+  .details .price { margin: 5px 0 7px; }
+  .details .price .normal-amount,
+  .details .offer-pricing .sale-amount { font-size: 23px; }
+  .details .offer-pricing { margin: 6px 0 8px; padding: 6px; }
+  .details .offer-pricing .sale-price { font-size: 23px; }
+  .details .offer-pricing .old-price { font-size: 15px; }
+  .details .iva-note { font-size: 10px; margin-left: 3px; }
+  .jenbach-logo { max-width: 55px; max-height: 34px; top: 7px; right: 7px; }
+  .has-jenbach-logo > .line,
+  .has-jenbach-logo > .code { padding-right: 58px; }
+
+  /* Muestras de color pequeñas, varias por fila, sin ocultar colores. */
+  .details .subtitle { font-size: 9px; margin: 3px 0 5px; line-height: 1.2; }
+  .details .colors { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 7px; }
+  .details .swatch { width: 65px; max-width: 100%; height: 19px; aspect-ratio: auto; border-radius: 4px; flex: 0 0 auto; }
+  .details .swatch-label { font-size: 7px; line-height: 1; padding: 1px 2px; overflow-wrap: anywhere; }
+  .details .swatch-image { width: 100%; height: 100%; object-fit: fill; }
+  .details .detail-link { font-size: 9px; padding: 5px 7px; }
+}
+@media (max-width: 360px) {
+  .item { grid-template-columns: minmax(0, 37%) minmax(0, 63%); }
+  .details { padding: 7px 6px; }
+  .details .swatch { width: 58px; height: 18px; }
+  .details .code { font-size: 21px; }
+  .details .price .normal-amount,
+  .details .offer-pricing .sale-amount,
+  .details .offer-pricing .sale-price { font-size: 21px; }
+}
+
+/* V25: lupa compacta y selector de categoría, en la misma línea. */
+@media(max-width:768px){
+  .tools{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;}
+  .tools .search-toggle{display:flex;align-items:center;justify-content:center;flex:0 0 43px;width:43px;height:42px;border:1px solid #456887;border-radius:10px;background:#0b1b30;color:#a6d5ff;font-size:27px;line-height:1;cursor:pointer;}
+  .tools .searchbox{display:none;min-width:0;flex:1 1 auto;}
+  .tools select#filter{flex:1 1 auto;width:auto;min-width:0;height:42px;padding:6px 9px;font-size:14px !important;}
+  body.mobile-search-open .tools .searchbox{display:flex;}
+  body.mobile-search-open .tools select#filter{display:none;}
+  body.mobile-search-open .tools .searchbox input{font-size:16px !important;}
+}
+
+/* V34: únicamente móvil. Compactar cabecera y fichas; no alterar PC. */
+@media (max-width: 768px) {
+  .head-inner { height: 67px !important; position: relative; }
+  .brand { max-height: 65px !important; width: 278px !important; max-width: 82vw !important; }
+  .hero { padding: 9px 8px 10px !important; }
+  .hero h1 { font-size: 22px !important; line-height: 1.13 !important; margin-bottom: 2px !important; }
+  .hero p { font-size: 11px !important; }
+
+  /* Ícono de actualización en el rincón superior, fuera de la línea de estado. */
+  #refresh { position: absolute; top: 16px; right: 10px; z-index: 30;
+    width: 34px; height: 34px; border: 1px solid #416582; border-radius: 9px;
+    background: #0b1b30; font-size: 0 !important; color: #9bd1ff;
+    display: flex; align-items: center; justify-content: center; padding: 0; }
+  #refresh::before { content: '↻'; font-size: 26px; line-height: 1; }
+  .statusline { padding: 1px 2px 7px; }
+  .tools { position: sticky; gap: 7px !important; padding: 8px 0 !important; }
+  .tools .search-toggle { flex: 0 0 42px !important; width: 42px !important; }
+  .tools select#filter { flex: 1 1 auto !important; min-width: 0 !important;
+    color: transparent !important; padding-left: 12px !important; }
+  .tools select#filter option { color: #fff !important; }
+  /* Etiqueta visible fija, aunque cambie la selección del select nativo. */
+  .tools::after { content: 'CATEGORÍAS'; position: absolute; pointer-events: none;
+    right: 32px; top: 50%; transform: translateY(-50%);
+    width: calc(100% - 98px); text-align: left; padding-left: 7px;
+    color: #fff; font-size: 14px; font-weight: 650; letter-spacing: .02em; }
+  body.mobile-search-open .tools::after { display: none; }
+
+  /* Número del artículo sube; origen se muestra a la derecha. */
+  .details { position: relative; padding-top: 8px !important; }
+  .details .line { position: absolute; top: 9px; right: 7px; width: 47%;
+    font-size: 8px !important; line-height: 1.2 !important;
+    text-align: right; margin: 0; letter-spacing: .03em; }
+  .details .code { padding-right: 47%; min-height: 26px; margin-top: 0 !important; }
+  .has-jenbach-logo > .line { top: 38px; width: 50%; }
+  .has-jenbach-logo > .code { padding-right: 50%; }
+  .details .detail-link { display: none !important; }
+}
+
+/* V27: correcciones exclusivas para móvil */
+@media(max-width:768px){
+  .head-inner .brand{width: min(410px, 88vw) !important;max-width:88vw !important;max-height:65px !important;transform:scale(1.38);transform-origin:center center;}
+  .tools{display:flex !important;grid-template-columns:none !important;align-items:center !important;}
+  .tools .search-toggle{display:flex !important;flex:0 0 43px !important;width:43px !important;height:43px !important;align-items:center;justify-content:center;order:0;font-size:19px !important;padding:0;}
+  .tools .searchbox{display:none !important;order:1;}
+  .tools select#filter{display:block !important;order:2;flex:1 1 0 !important;width:0 !important;}
+  body.mobile-search-open .tools .searchbox{display:flex !important;flex:1 1 0 !important;}
+  body.mobile-search-open .tools select#filter{display:none !important;}
+  .tools::after{width:calc(100% - 98px) !important;}
+  .details .desc{display:block !important;margin-bottom:7px !important;}
+  .details .measure{display:block !important;clear:both !important;}
+}
+@media(min-width:769px){.search-toggle{display:none !important;}}
+
+/* V44: móvil conserva la lupa desplegable y agrega colores sin romper categorías. */
+@media(max-width:768px){
+ .tools{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:6px!important;}
+ .tools .search-toggle{order:0!important;flex:0 0 42px!important;}
+ .tools select#color-filter{display:block!important;order:1!important;flex:1 1 0!important;width:0!important;min-width:0!important;height:43px!important;padding:6px 5px!important;font-size:12px!important;color:#fff!important;}
+ .tools select#filter{display:block!important;order:2!important;flex:1 1 0!important;width:0!important;min-width:0!important;height:43px!important;color:#fff!important;padding:6px 5px!important;font-size:12px!important;}
+ .tools::after{display:none!important;}
+ .tools .searchbox{display:none!important;}
+ body.mobile-search-open .tools .searchbox{display:flex!important;order:1!important;flex:1 1 auto!important;}
+ body.mobile-search-open .tools select#color-filter,body.mobile-search-open .tools select#filter{display:none!important;}
+}

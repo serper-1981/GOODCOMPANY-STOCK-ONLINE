@@ -1,0 +1,111 @@
+
+:root{font-family:Inter,Montserrat,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#f6f9ff;background:#03101f;color-scheme:dark}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:linear-gradient(115deg,#041121,#020a14 65%)}
+.site-head{background:linear-gradient(100deg,#07172a,#102d4b 55%,#07172a);border-bottom:1px solid #25435d}.head-inner{height:116px;display:flex;align-items:center;justify-content:center;overflow:hidden}.brand{display:block;width:370px;max-width:86vw;max-height:106px;object-fit:contain;filter:brightness(0) invert(1)}
+.hero{text-align:center;padding:18px 10px 17px;background:linear-gradient(110deg,#071728,#0b243d 60%,#071728);border-bottom:1px solid #21405e}.hero h1{font-size:clamp(25px,3.5vw,36px);line-height:1.15;margin:0 0 5px;letter-spacing:.03em}.hero p{margin:0;color:#cbdcf1;font-size:14px}
+main{width:min(100% - 24px,980px);margin:auto}.tools{position:sticky;top:0;z-index:10;display:flex;gap:10px;padding:13px 0 11px;background:#041323ed;backdrop-filter:blur(14px)}.searchbox{flex:1.6;min-width:0;display:flex;align-items:center;border:1px solid #456887;border-radius:10px;background:#0b1b30}.searchbox span{font-size:26px;color:#9ccaff;padding:0 10px}.searchbox input{min-width:0;width:100%;background:none;border:0;outline:none;color:#fff;font:inherit;font-size:13px;padding:12px 8px 12px 0}.searchbox input::placeholder{color:#9fb4c9}.tools select{flex:1;min-width:0;border:1px solid #456887;border-radius:10px;background:#0b1b30;color:white;font:inherit;font-size:13px;padding:10px}
+.statusline{display:flex;align-items:center;gap:10px;padding:4px 2px 13px;color:#bdd3eb}.statusline p{flex:1;font-size:12px;line-height:1.45;margin:0}#refresh{border:0;background:transparent;color:#69baff;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}#refresh:disabled{opacity:.5}.group{font-size:15px;letter-spacing:.07em;margin:13px 0 11px;padding-bottom:9px;border-bottom:1px solid #284c6a}
+.item{display:grid;grid-template-columns:245px minmax(0,1fr);gap:0;align-items:stretch;margin:0 0 12px;overflow:hidden;border:1px solid #2b4c68;border-radius:13px;background:#091b30;box-shadow:0 7px 18px #0003}.visual{padding:11px;display:flex;align-items:flex-start;justify-content:center;min-width:0}.photo{display:block;width:100%;height:auto;max-width:100%;border-radius:8px;object-fit:contain;background:#fff}.details{min-width:0;padding:18px 20px;background:linear-gradient(130deg,#132f4b,#0e243b 75%)}.line{font-size:11px;letter-spacing:.08em;color:#93d0ff;margin-bottom:5px}.code{font-size:29px;line-height:1.1;font-weight:800;margin:0 0 7px}.desc{font-size:13px;line-height:1.5;margin:0 0 8px;color:#edf5ff}.price{font-size:27px;font-weight:850;margin:8px 0 12px;line-height:1.1;color:#fff}.measure{border-top:1px solid #46617b;padding:11px 0 9px;font-size:12px;color:#c4e2fb;margin-bottom:3px}.subtitle{font-size:11px;letter-spacing:.06em;color:#82c9ff;font-weight:800;margin:3px 0 8px}.colors{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:13px;align-items:flex-start}.swatch{position:relative;display:flex;align-items:center;justify-content:center;width:180px;max-width:100%;aspect-ratio:5/1;height:auto;border:1px solid #6b849a;border-radius:8px;overflow:hidden;background:#15273a}.swatch-image{display:block;width:100%;height:100%;object-fit:fill;object-position:center}.swatch:has(.swatch-image) .swatch-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.swatch-label{font-size:10px;text-align:center;line-height:1.1;color:white;font-weight:750;padding:3px}.swatch-fallback{background:#192e43}.swatch-fallback .swatch-label{position:static;width:auto;height:auto;clip-path:none}.detail-link{display:inline-flex;align-items:center;justify-content:center;border:1px solid #4bafff;border-radius:8px;padding:9px 13px;text-decoration:none;color:#bde4ff;font-size:12px;font-weight:750}.detail-link:hover{background:#1b5d9b;color:white}.empty{text-align:center;padding:30px;color:#c3d8ef}footer{text-align:center;color:#8faac6;padding:25px 10px 35px;font-size:11px}
+@media(max-width:650px){.head-inner{height:91px}.brand{width:315px;max-height:85px}.hero{padding:14px 9px}.hero h1{font-size:25px}.hero p{font-size:12px}main{width:calc(100% - 14px)}.tools{gap:6px;padding:9px 0}.searchbox{flex:1.5}.searchbox span{font-size:22px;padding:0 7px}.searchbox input{font-size:11px;padding:10px 2px 10px 0}.tools select{flex:1;font-size:11px;padding:8px 4px}.statusline p{font-size:10px}.group{font-size:13px}.item{grid-template-columns:minmax(0,38%) minmax(0,62%);border-radius:10px;margin-bottom:9px}.visual{padding:7px}.details{padding:10px 9px}.line{font-size:9px}.code{font-size:21px;margin-bottom:4px}.desc{font-size:11px;line-height:1.35}.price{font-size:21px;margin:6px 0 9px}.measure{font-size:10px;padding:8px 0}.subtitle{font-size:9px}.colors{gap:5px;margin-bottom:10px}.swatch{width:120px;aspect-ratio:5/1;border-radius:5px}.swatch-label{font-size:8px}.detail-link{font-size:10px;padding:7px 9px}}
+@media(max-width:360px){.item{grid-template-columns:minmax(0,37%) minmax(0,63%)}.details{padding:8px 6px}.swatch{width:100px}.searchbox input,.tools select{font-size:10px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* V9.1 — Mejora de legibilidad: únicamente textos de las fichas.
+   Fotografías, logo, tarjetas, botones y barritas conservan su diseño. */
+.details .line{font-size:13px;line-height:1.4}
+.details .code{font-size:35px;line-height:1.15}
+.details .desc{font-size:16px;line-height:1.5}
+.details .price{font-size:34px;line-height:1.15}
+.details .measure{font-size:15px;line-height:1.55}
+@media(max-width:650px){
+ .details .line{font-size:11px}
+ .details .code{font-size:25px}
+ .details .desc{font-size:12px;line-height:1.4}
+ .details .price{font-size:25px}
+ .details .measure{font-size:12px;line-height:1.45}
+}
+@media(max-width:360px){
+ .details .line{font-size:10px}
+ .details .code{font-size:23px}
+ .details .desc{font-size:11.5px}
+ .details .price{font-size:23px}
+ .details .measure{font-size:11px}
+}
+
+/* V12: precios de oferta y logo Jenbach. Sin alterar la distribución de tarjetas. */
+.details{position:relative}.jenbach-logo{position:absolute;top:12px;right:12px;max-width:105px;max-height:55px;width:auto;height:auto;object-fit:contain;background:transparent;border-radius:0;padding:0;box-shadow:none}.has-jenbach-logo>.line,.has-jenbach-logo>.code{padding-right:115px;overflow-wrap:anywhere}
+.offer-pricing{margin:10px 0 12px;padding:10px 12px;background:#102e3c;border:1px solid #427789;border-radius:9px}.offer-tag{display:inline-block;padding:3px 9px;margin-bottom:7px;border-radius:5px;background:#bd283b;color:#fff;font-size:12px;font-weight:900;letter-spacing:.06em}.old-price{font-size:15px;color:#c3d0dc}.old-price s{color:#d9b8b8}.sale-price{margin-top:5px;font-size:22px;font-weight:850;color:#8af0b0}
+@media(max-width:650px){.jenbach-logo{top:8px;right:8px;max-width:66px;max-height:39px;padding:0}.has-jenbach-logo>.line,.has-jenbach-logo>.code{padding-right:70px}.offer-pricing{padding:7px;margin:7px 0}.offer-tag{font-size:10px}.old-price{font-size:11px}.sale-price{font-size:15px;line-height:1.25}}
+
+/* Ajuste puntual: precios promocionales más visibles, sin cambiar las tarjetas. */
+.details .offer-pricing .old-price{font-size:21px;line-height:1.35;font-weight:650;color:#f0f5fb}
+.details .offer-pricing .old-price s{color:#f2d2d2;text-decoration-thickness:2px}
+.details .offer-pricing .sale-price{font-size:32px;line-height:1.2;font-weight:900;color:#8af0b0}
+@media(max-width:650px){
+ .details .offer-pricing .old-price{font-size:15px}
+ .details .offer-pricing .sale-price{font-size:22px;line-height:1.25}
+}
+
+/* V22 — Precios unificados, sin alterar banda OFERTA ni logo JENBACH. */
+.details .price .normal-amount,
+.details .offer-pricing .sale-amount{font-size:34px;font-weight:900;line-height:1.15;letter-spacing:-.02em}
+.details .price .normal-amount{color:#fff}
+.details .offer-pricing .sale-amount{color:#8af0b0}
+.details .offer-pricing .sale-price{font-size:34px;line-height:1.2}
+.details .offer-pricing .sale-label{font-size:19px;font-weight:750;color:#8af0b0;margin-right:6px}
+.details .offer-pricing .old-price{font-size:23px;line-height:1.35;color:#f0f5fb;font-weight:650}
+.details .offer-pricing .old-price s{color:#f2f5fa;text-decoration-thickness:2px}
+.details .iva-note{display:inline-block;margin-left:7px;font-size:13px;font-weight:750;white-space:nowrap;letter-spacing:0;vertical-align:baseline;color:#c9d9e9}
+.details .offer-pricing .sale-price .iva-note{color:#b3f4ca}
+@media(max-width:650px){
+ .details .price .normal-amount,.details .offer-pricing .sale-amount{font-size:25px}
+ .details .offer-pricing .sale-price{font-size:25px}
+ .details .offer-pricing .sale-label{display:block;font-size:12px;margin-right:0;margin-bottom:2px}
+ .details .offer-pricing .old-price{font-size:17px}
+ .details .iva-note{font-size:10px;margin-left:4px}
+}
+@media(max-width:360px){
+ .details .price .normal-amount,.details .offer-pricing .sale-amount{font-size:23px}
+ .details .offer-pricing .sale-price{font-size:23px}
+ .details .offer-pricing .old-price{font-size:15px}
+}
+
+
+
+/* Informe de artículos y colores: visible solo en la versión web/escritorio. */
+.export-colors{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;padding:8px 13px;border:1px solid #4f7895;border-radius:8px;background:#173e5d;color:#fff;text-decoration:none;font-size:12px;font-weight:700}
+.export-colors:hover{background:#21567b}
+@media(max-width:650px){.export-colors{display:none!important}}
+
+/* V44: tres filtros alineados en escritorio; lupa integrada en el buscador. */
+@media(min-width:769px){
+ .tools{gap:9px;}
+ .tools .search-toggle{display:none!important;}
+ .tools .searchbox{flex:1.2;min-width:0;flex-direction:row-reverse;}
+ .tools .searchbox span{font-size:24px;padding:0 12px 0 5px;}
+ .tools .searchbox input{padding:12px 8px 12px 13px;}
+ .tools select#color-filter{flex:1;min-width:0;}
+ .tools select#filter{flex:1;min-width:0;}
+}
+
+/* Banner adaptable sin alterar el logo cuando no está activo */
+.site-head:has(#promo-banner:not([hidden])) .head-inner{height:auto;min-height:0}
+#promo-banner:not([hidden]){display:block;width:100%;height:auto;max-height:none;object-fit:contain}
+.site-head:has(#promo-banner:not([hidden])) .brand{display:none}
+
+@media(max-width:768px){.site-head:has(#promo-banner:not([hidden])) .head-inner{height:auto!important;min-height:0!important;padding:0!important}#promo-banner:not([hidden]){width:100%;height:auto!important;max-height:none!important}}
+
+/* AJUSTE HEADER BANNER: sin franjas arriba ni abajo */
+.site-head:has(#promo-banner:not([hidden])){padding:0!important;margin:0!important;line-height:0!important;}
+.site-head:has(#promo-banner:not([hidden])) .head-inner{height:auto!important;min-height:0!important;max-height:none!important;padding:0!important;margin:0!important;display:block!important;line-height:0!important;}
+.site-head #promo-banner:not([hidden]){display:block!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:contain!important;margin:0!important;padding:0!important;border:0!important;}
+
+/* FIX FULL WIDTH: banner ocupa todo el ancho visible sin estirar ni recortar el logo.
+   El logo original conserva su aspecto cuando el banner está desactivado. */
+html,body{max-width:100%;overflow-x:clip}
+.site-head:has(> .head-inner > #promo-banner:not([hidden])){width:100%!important;max-width:none!important;overflow:hidden!important}
+.site-head:has(> .head-inner > #promo-banner:not([hidden])) > .head-inner{width:100%!important;max-width:none!important;min-width:0!important;height:auto!important;padding:0!important;margin:0!important;display:block!important;overflow:visible!important}
+.site-head:has(> .head-inner > #promo-banner:not([hidden])) #promo-banner{display:block!important;width:100%!important;max-width:none!important;min-width:0!important;height:auto!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;object-position:center!important;transform:none!important;margin:0!important;padding:0!important}
+
+/* Banner full bleed: keep natural image proportions and avoid clipping. */
+.site-head:has(#promo-banner:not([hidden])){width:100%!important;max-width:none!important;overflow:visible!important}
+.site-head:has(#promo-banner:not([hidden])) .head-inner{width:100%!important;max-width:none!important;max-height:none!important;overflow:visible!important}
+.site-head:has(#promo-banner:not([hidden])) #promo-banner{display:block!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:contain!important}
