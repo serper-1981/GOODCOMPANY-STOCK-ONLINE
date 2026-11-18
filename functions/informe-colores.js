@@ -57,7 +57,7 @@ function printColorsHtml(products) {
   .article-cell{font-size:11px;white-space:nowrap}
   .color-cell{font-size:9px;font-weight:600;word-break:normal;hyphens:none}
   @media print{body{padding:0}.toolbar{display:none}.imported-start{break-before:page;page-break-before:always}h2,th{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
-  </style></head><body><div class="toolbar"><button onclick="window.print()">IMPRIMIR A4 VERTICAL</button><button onclick="window.close()">Cerrar</button></div><img class="print-logo" src="https://raw.githubusercontent.com/serpereyra1981-GC/LOGOS/9c6587df170a9f27634b3ba05e01eabc4de636a2/NUEVO%20LOGO%20GC.png" alt="GOOD COMPANY"><p class="sub">ARTÍCULOS Y COLORES DISPONIBLES · ${products.length} artículos · ${new Date().toLocaleDateString('es-AR')}</p>${sections}</body></html>`;
+  </style></head><body><div class="toolbar"><button onclick="window.print()">IMPRIMIR A4 VERTICAL</button><button onclick="window.close()">Cerrar</button></div><img class="print-logo" src="/goodcompany-logo-transparente-blanco.png" alt="GOOD COMPANY"><p class="sub">ARTÍCULOS Y COLORES DISPONIBLES · ${products.length} artículos · ${new Date().toLocaleDateString('es-AR')}</p>${sections}</body></html>`;
 }
 
 export async function onRequestGet({env}) {
