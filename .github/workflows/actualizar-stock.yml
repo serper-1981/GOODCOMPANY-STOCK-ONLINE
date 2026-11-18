@@ -1,9 +1,9 @@
 name: Actualizar stock Good Company
 on:
   schedule:
-    # Argentina UTC-3: 08:00 a 15:45 y actualización final a las 16:00.
-    - cron: '*/15 11-18 * * 1-5'
-    - cron: '0 19 * * 1-5'
+    # Argentina UTC-3: cada 15 min desde 08:07 hasta 15:52, final a las 16:07.
+    - cron: '7,22,37,52 11-18 * * 1-5'
+    - cron: '7 19 * * 1-5'
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
         run: |
           HORA=$(date +%H%M)
           DIA=$(date +%u)
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || { [ "$DIA" -le 5 ] && [ "$HORA" -ge 0800 ] && [ "$HORA" -le 1605 ]; }; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || { [ "$DIA" -le 5 ] && [ "$HORA" -ge 0800 ] && [ "$HORA" -le 1630 ]; }; then
             echo "allowed=true" >> "$GITHUB_OUTPUT"
           else
             echo "allowed=false" >> "$GITHUB_OUTPUT"
@@ -43,8 +43,8 @@ jobs:
         env:
           GC_ADMIN_EMAIL: ${{ secrets.GC_ADMIN_EMAIL }}
           GC_ADMIN_PASSWORD: ${{ secrets.GC_ADMIN_PASSWORD }}
-          GC_EMAIL: ${{ secrets.GC_EMAIL }}
-          GC_PASSWORD: ${{ secrets.GC_PASSWORD }}
+          GC_EMAIL: ${{ secrets.GC_ADMIN_EMAIL }}
+          GC_PASSWORD: ${{ secrets.GC_ADMIN_PASSWORD }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_KV_NAMESPACE_ID: ${{ secrets.CLOUDFLARE_KV_NAMESPACE_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

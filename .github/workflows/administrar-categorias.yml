@@ -1,0 +1,32 @@
+name: Administrar orden de categorías Good Company
+on:
+  workflow_dispatch:
+    inputs:
+      order:
+        description: 'Lista JSON de categorías'
+        required: true
+        type: string
+permissions:
+  contents: write
+jobs:
+  categories:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Guardar orden
+        env:
+          ORDER_JSON: ${{ inputs.order }}
+        run: |
+          python3 - <<'PYTHON'
+          import os,json,pathlib
+          order=json.loads(os.environ['ORDER_JSON'])
+          if not isinstance(order,list) or len(order)>120 or any(not isinstance(x,str) for x in order):
+              raise SystemExit('Orden inválido')
+          pathlib.Path('public/category-order.json').write_text(json.dumps({'order':order},ensure_ascii=False))
+          PYTHON
+      - name: Publicar
+        run: |
+          git config user.name "Good Company Catalog Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/category-order.json
+          git diff --cached --quiet || (git commit -m "Actualizar orden de categorías" && git push)

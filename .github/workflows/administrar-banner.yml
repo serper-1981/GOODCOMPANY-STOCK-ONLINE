@@ -1,0 +1,74 @@
+name: Administrar banner Good Company
+on:
+  workflow_dispatch:
+    inputs:
+      active:
+        description: 'Mostrar banner'
+        required: true
+        type: string
+      part1:
+        description: 'Parte 1 de imagen WebP'
+        required: false
+        type: string
+      part2:
+        description: 'Parte 2 de imagen WebP'
+        required: false
+        type: string
+      part3:
+        description: 'Parte 3 de imagen WebP'
+        required: false
+        type: string
+      part4:
+        description: 'Parte 4 de imagen WebP'
+        required: false
+        type: string
+      part5:
+        description: 'Parte 5 de imagen WebP'
+        required: false
+        type: string
+      part6:
+        description: 'Parte 6 de imagen WebP'
+        required: false
+        type: string
+      part7:
+        description: 'Parte 7 de imagen WebP'
+        required: false
+        type: string
+      part8:
+        description: 'Parte 8 de imagen WebP'
+        required: false
+        type: string
+permissions:
+  contents: write
+jobs:
+  banner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Guardar banner
+        env:
+          BANNER_ACTIVE: ${{ inputs.active }}
+          BANNER_PART1: ${{ inputs.part1 }}
+          BANNER_PART2: ${{ inputs.part2 }}
+          BANNER_PART3: ${{ inputs.part3 }}
+          BANNER_PART4: ${{ inputs.part4 }}
+          BANNER_PART5: ${{ inputs.part5 }}
+          BANNER_PART6: ${{ inputs.part6 }}
+          BANNER_PART7: ${{ inputs.part7 }}
+          BANNER_PART8: ${{ inputs.part8 }}
+        run: |
+          python3 - <<'PYTHON'
+          import os,base64,json,pathlib
+          p=pathlib.Path('public')
+          active=os.environ.get('BANNER_ACTIVE')=='true'
+          img=''.join(os.environ.get(f'BANNER_PART{i}','') for i in range(1,9))
+          if active and not img: raise SystemExit('Falta la imagen del banner')
+          if img: (p/'banner-actual.webp').write_bytes(base64.b64decode(img,validate=True))
+          (p/'banner-config.json').write_text(json.dumps({'active':active}))
+          PYTHON
+      - name: Publicar cambio
+        run: |
+          git config user.name "Good Company Banner Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/banner-config.json public/banner-actual.webp
+          git diff --cached --quiet || (git commit -m "Actualizar banner Good Company" && git push)
