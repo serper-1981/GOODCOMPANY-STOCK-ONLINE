@@ -46,6 +46,7 @@ async function run(){
   const result=await fetch(url,{method:'PUT',headers:{Authorization:`Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,'Content-Type':'application/json'},body:payload});
   if(!result.ok)throw Error('Cloudflare rechazó la publicación: HTTP '+result.status+' '+(await result.text()).slice(0,500));
   console.log('[PUBLICACIÓN] Catálogo publicado:',saved.products.length,'artículos;',saved.savedAt);
+  console.log('[PUBLICACIÓN] Actualización de stock finalizada; comparación de ventas omitida.');
  }finally{await stopServer();}
 }
 run().catch(e=>{console.error('[PUBLICACIÓN ERROR]',e.message);process.exitCode=1;});
