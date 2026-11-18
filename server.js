@@ -734,7 +734,7 @@ function printColorsHtml(products) {
   .color-cell{font-size:13px;font-weight:700;word-break:normal;hyphens:auto}
   @media print{body{padding:0}.toolbar{display:none}.imported-start{break-before:page;page-break-before:always}h2,th{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
-  </style></head><body><div class="toolbar"><button onclick="window.print()">IMPRIMIR A4 VERTICAL</button><button onclick="window.close()">Cerrar</button></div><img class="print-logo" src="/goodcompany-logo-transparente-blanco.png" alt="GOOD COMPANY"><p class="sub">ARTÍCULOS Y COLORES DISPONIBLES · ${products.length} artículos · ${new Date().toLocaleDateString('es-AR')}</p>${sections}</body></html>`;
+  </style></head><body><div class="toolbar"><button onclick="window.print()">IMPRIMIR A4 VERTICAL</button><button onclick="window.close()">Cerrar</button></div><img class="print-logo" src="https://raw.githubusercontent.com/serper-1981/LOGOS/9c6587df170a9f27634b3ba05e01eabc4de636a2/NUEVO%20LOGO%20GC.png" alt="GOOD COMPANY"><p class="sub">ARTÍCULOS Y COLORES DISPONIBLES · ${products.length} artículos · ${new Date().toLocaleDateString('es-AR')}</p>${sections}</body></html>`;
 }
 
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png' };
