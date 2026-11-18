@@ -127,3 +127,60 @@
  body.mobile-search-open .tools .searchbox{display:flex!important;order:1!important;flex:1 1 auto!important;}
  body.mobile-search-open .tools select#color-filter,body.mobile-search-open .tools select#filter{display:none!important;}
 }
+
+/* Carrito V3: legibilidad y pulsaciones móviles, sin alterar catálogo ni escritorio.
+   touch-action: manipulation evita zoom por doble toque en controles; mantiene pinch zoom accesible. */
+@media(max-width:768px){
+ .gc-dialog{font-size:16px;line-height:1.45;}
+ .gc-dialog h2{font-size:21px;}
+ .gc-dialog .gc-muted{font-size:13px;}
+ .gc-dialog .gc-unit-price{font-size:22px;}
+ .gc-dialog .gc-quantity-row,.gc-dialog .gc-cart-row{font-size:15px;gap:10px;padding:12px 0;}
+ .gc-dialog .gc-cart-info strong{font-size:14px;line-height:1.35;}
+ .gc-dialog .gc-cart-info .gc-muted{font-size:12px;}
+ .gc-dialog .gc-stepper{gap:9px;}
+ .gc-dialog .gc-stepper button{width:39px;height:39px;font-size:23px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+ .gc-dialog .gc-quantity{font-size:16px;min-width:22px;}
+ .gc-dialog .gc-selection-total,.gc-dialog #gc-cart-summary{font-size:16px;}
+ .gc-dialog .gc-add,.gc-dialog .gc-continue,.gc-dialog .gc-cart-actions button{font-size:13px;min-height:44px;touch-action:manipulation;}
+ .gc-dialog .gc-close,.gc-buy,.gc-cart-button,.gc-confirm-actions button{touch-action:manipulation;}
+ .gc-confirm-dialog .gc-confirm-description{font-size:15px;}
+ .gc-confirm-dialog .gc-confirm-actions button{font-size:14px;}
+}
+
+/* V4 — En dispositivos tactiles, evitar zoom por doble toque sin impedir
+   zoom por pellizco (dos dedos). No modificar el viewport. */
+@media (max-width:768px) and (pointer:coarse) {
+  html, body, button, a, select, input, .gc-dialog, .gc-dialog *, .gc-cart-button, .gc-buy {
+    touch-action: manipulation;
+  }
+}
+
+/* Solo móvil: etiqueta de línea encima del artículo, igual que en escritorio.
+   Mantener el logo de marca en la esquina superior derecha. */
+@media (max-width:768px) {
+  .details.has-product-logo { position:relative; padding-top:9px !important; }
+  .details.has-product-logo > .line,
+  .details.has-jenbach-logo > .line {
+    position:static !important;
+    top:auto !important; left:auto !important; right:auto !important;
+    display:block !important;
+    width:auto !important;
+    text-align:left !important;
+    padding:0 48px 0 0 !important;
+    margin:0 0 5px !important;
+    font-size:10px !important;
+    line-height:1.25 !important;
+  }
+  .details.has-product-logo > .code,
+  .details.has-jenbach-logo > .code {
+    padding-right:48px !important;
+    min-height:0 !important;
+    margin-top:0 !important;
+  }
+  .gc-product-logo, .jenbach-logo {
+    position:absolute; top:5px; right:5px;
+    width:42px; max-width:42px; height:29px; max-height:29px;
+    object-fit:contain;
+  }
+}

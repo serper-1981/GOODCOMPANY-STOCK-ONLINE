@@ -109,3 +109,98 @@ html,body{max-width:100%;overflow-x:clip}
 .site-head:has(#promo-banner:not([hidden])){width:100%!important;max-width:none!important;overflow:visible!important}
 .site-head:has(#promo-banner:not([hidden])) .head-inner{width:100%!important;max-width:none!important;max-height:none!important;overflow:visible!important}
 .site-head:has(#promo-banner:not([hidden])) #promo-banner{display:block!important;width:100%!important;height:auto!important;max-height:none!important;object-fit:contain!important}
+
+/* GOOD COMPANY - carrito etapa 1. Solo elementos nuevos. */
+.visual{flex-direction:column;align-items:stretch;justify-content:flex-start;gap:9px}
+.gc-buy{width:100%;border:1px solid #25996a;border-radius:7px;background:#147a55;color:#fff;font:700 12px Arial,sans-serif;padding:8px 7px;cursor:pointer;letter-spacing:.025em}
+.gc-buy:hover,.gc-add:hover{background:#1c9869}
+.gc-cart-button{position:fixed;bottom:20px;right:20px;z-index:35;background:#147a55;color:#fff;border:1px solid #3cb88b;border-radius:999px;padding:12px 16px;font:700 13px Arial,sans-serif;box-shadow:0 6px 20px #0008;cursor:pointer}
+.gc-dialog{width:min(94vw,470px);max-height:86vh;overflow:auto;border:1px solid #426580;border-radius:14px;padding:18px;background:#10243a;color:#f5f9ff;box-shadow:0 15px 55px #000b}
+.gc-dialog::backdrop{background:#0009}.gc-dialog h2{font-size:19px;margin:0 35px 9px 0}.gc-dialog p{line-height:1.4}.gc-close{float:right;background:transparent;color:white;border:1px solid #63829c;border-radius:7px;padding:5px 9px;cursor:pointer}
+.gc-muted{font-size:12px;color:#bed0df}.gc-unit-price{font-size:20px;font-weight:800;color:#8af0b0}
+.gc-quantity-row,.gc-cart-row{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #37546c;padding:10px 0;font-size:13px}
+.gc-quantity-row>span{min-width:0;overflow-wrap:anywhere}.gc-stepper{display:flex;align-items:center;gap:8px;flex-shrink:0}.gc-stepper button{width:32px;height:32px;border:1px solid #57748d;border-radius:7px;background:#1a3a56;color:#fff;font-size:20px;cursor:pointer}.gc-quantity{min-width:21px;text-align:center;font-weight:800}
+.gc-selection-total,#gc-cart-summary{font-weight:800;border-top:1px solid #37546c;padding-top:12px}.gc-add{width:100%;border:0;border-radius:8px;background:#147a55;color:white;font-weight:800;padding:12px;cursor:pointer}.gc-add:disabled{opacity:.45;cursor:not-allowed}.gc-cart-info{display:flex;flex-direction:column;gap:3px;min-width:0}.gc-cart-info strong{font-size:12px;overflow-wrap:anywhere}.gc-cart-info .gc-muted{font-size:11px}.gc-continue{border:1px solid #57748d;border-radius:8px;background:#1a3a56;color:white;padding:10px;cursor:pointer;width:100%}
+@media(max-width:768px){.visual{gap:6px}.gc-buy{font-size:10px;padding:7px 2px;border-radius:6px}.gc-cart-button{bottom:12px;right:10px;padding:10px 12px;font-size:12px}.gc-dialog{padding:14px}}
+
+/* Etapa 2: acciones del pedido, sin modificar tarjetas ni fotos. */
+.gc-cart-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0 9px}
+.gc-cart-actions button{min-width:0;border-radius:9px;padding:12px 8px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+.gc-cancel{background:#38212a;color:#ffe4e6;border:1px solid #c76676}
+.gc-cancel:hover:not(:disabled){background:#602b38}
+.gc-whatsapp{background:#168458;color:white;border:1px solid #28a86d}
+.gc-cart-actions button:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:420px){.gc-cart-actions button{font-size:10px;padding:11px 5px}}
+
+/* Confirmación de anulación: misma estética que MI PEDIDO. */
+.gc-confirm-dialog{width:min(92vw,420px);padding:20px;overflow:visible}
+.gc-confirm-dialog h2{margin:0 0 13px;font-size:19px;line-height:1.25;color:#fff}
+.gc-confirm-description{margin:0 0 21px;color:#bed0df;font-size:14px;line-height:1.55}
+.gc-confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gc-confirm-actions button{width:100%;min-height:44px;padding:10px 8px;border-radius:8px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+@media(max-width:420px){.gc-confirm-dialog{padding:17px}.gc-confirm-actions{grid-template-columns:1fr}.gc-confirm-actions button{font-size:12px}}
+
+/* Selección del destino de pedidos */
+.gc-send-dialog{width:min(94vw,460px)}
+.gc-send-option{border:1px solid #41647e;border-radius:11px;padding:14px;margin:12px 0;background:#142f49}
+.gc-send-option h3{font-size:15px;margin:0 0 8px;color:#fff}
+.gc-send-option p{font-size:13px;color:#d0dfeb;line-height:1.5;margin:0 0 12px}
+.gc-send-option button{width:100%;border-radius:8px;padding:12px 8px;font-weight:800;font-size:12px;cursor:pointer}
+.gc-send-option button:disabled{opacity:.5;cursor:not-allowed}
+.gc-send-option .gc-send-status{font-size:11px;margin:8px 0 0;color:#bcd0df}
+.gc-send-dialog>#gc-destination-back{margin-top:4px}
+#gc-sent-modal .gc-whatsapp{border-radius:8px;padding:10px;color:white;font-weight:800;cursor:pointer}
+
+/* Modal de envío: identidad aprobada. Sin cambios funcionales. */
+#gc-destination-modal .gc-send-option.gc-send-good{background:linear-gradient(145deg,#103c3e,#0c343b);border-color:#258c77}
+#gc-destination-modal .gc-send-option.gc-send-mayorista{background:linear-gradient(145deg,#302b59,#252547);border-color:#7951b5}
+#gc-destination-modal .gc-option-heading{display:flex;align-items:center;justify-content:center;gap:11px;margin:0 0 14px;color:#fff;font-size:16px;letter-spacing:2px;font-weight:700;text-align:center}
+#gc-destination-modal .gc-option-heading img{display:block;width:34px;height:28px;object-fit:contain;flex:none}
+#gc-destination-modal .gc-send-good #gc-send-direct{background:#13895f;color:#fff;border:1px solid #29c58b}
+#gc-destination-modal .gc-send-mayorista #gc-send-wholesale{background:linear-gradient(180deg,#9138c8,#7128a9);color:#fff;border:1px solid #b36aec}
+#gc-destination-modal .gc-send-good p,#gc-destination-modal .gc-send-mayorista p{color:#e7eef8}
+#gc-destination-modal .gc-send-mayorista label{color:#fff}
+#gc-destination-modal .gc-send-option{padding:14px 13px}
+@media(max-width:480px){#gc-destination-modal .gc-option-heading{font-size:14px;letter-spacing:1.5px}#gc-destination-modal .gc-option-heading img{width:29px;height:25px}}
+
+/* FIX DISTRIBUCION MODAL DESTINO - escritorio y celular.
+   No altera logo, carrito ni funcionamiento WhatsApp. */
+#gc-destination-modal{box-sizing:border-box;width:min(94vw,460px);max-width:460px;max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;padding:18px}
+#gc-destination-modal *,#gc-destination-modal *::before,#gc-destination-modal *::after{box-sizing:border-box}
+#gc-destination-modal .gc-send-option{display:block;width:100%;margin:12px 0;padding:14px 13px;min-width:0}
+#gc-destination-modal .gc-option-heading{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:9px;margin:0 0 14px;line-height:1.35;white-space:normal}
+#gc-destination-modal .gc-option-heading img{display:block;width:30px;height:26px;object-fit:contain;flex:0 0 auto}
+#gc-destination-modal .gc-send-option>p{display:block;margin:0 0 12px;line-height:1.5}
+#gc-destination-modal .gc-customer-fields{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:7px!important;width:100%;min-width:0;margin:14px 0 13px!important}
+#gc-destination-modal .gc-customer-fields label{display:block!important;width:100%!important;margin:0!important;padding:0!important;font-size:12px!important;font-weight:800!important;line-height:1.4!important}
+#gc-destination-modal #gc-customer-name{display:block!important;position:static!important;width:100%!important;min-width:0!important;max-width:100%!important;height:44px!important;margin:0!important;padding:10px 12px!important;border:1px solid #66829a!important;border-radius:8px!important;background:#0a2035!important;color:#fff!important;font:inherit!important;font-size:14px!important;line-height:22px!important;float:none!important}
+#gc-destination-modal #gc-customer-name::placeholder{color:#9caec0}
+#gc-destination-modal #gc-customer-error{margin:0!important;font-size:12px;line-height:1.4}
+#gc-destination-modal .gc-send-option button{display:block;width:100%;min-height:43px;margin:0;font-size:12px;line-height:1.35}
+#gc-destination-modal .gc-send-option .gc-send-status{margin:9px 0 0;font-size:11px}
+#gc-destination-modal>#gc-destination-back{display:block;width:100%;margin-top:14px;min-height:40px}
+@media(max-width:480px){
+ #gc-destination-modal{width:calc(100vw - 20px);max-width:460px;max-height:calc(100dvh - 16px);padding:14px 12px}
+ #gc-destination-modal h2{font-size:17px;line-height:1.3}
+ #gc-destination-modal .gc-send-option{padding:12px;margin:11px 0}
+ #gc-destination-modal .gc-option-heading{font-size:14px;letter-spacing:1px;margin-bottom:11px}
+ #gc-destination-modal .gc-option-heading img{width:27px;height:23px}
+ #gc-destination-modal .gc-send-option>p{font-size:12px;line-height:1.45;margin-bottom:10px}
+ #gc-destination-modal .gc-customer-fields{margin:11px 0 12px!important}
+}
+
+/* Etiquetas originales de color en la ventana COMPRAR; sin alterar el catálogo. */
+.gc-quantity-row .gc-cart-color-swatch{
+ display:flex;position:relative;flex:0 1 180px;width:180px;max-width:calc(100% - 125px);
+ min-width:0;height:36px;aspect-ratio:auto;margin:0;border-radius:7px;
+ overflow:hidden;align-items:center;justify-content:center;
+}
+.gc-quantity-row .gc-cart-color-swatch .swatch-image{width:100%;height:100%;object-fit:fill}
+.gc-quantity-row .gc-cart-color-swatch.swatch-fallback .swatch-label{font-size:11px}
+@media(max-width:420px){
+ .gc-quantity-row .gc-cart-color-swatch{flex-basis:150px;width:150px;max-width:calc(100% - 120px);height:32px}
+}
+
+/* Logos de marca en todas las fichas: escritorio y móvil. */
+.gc-product-logo{position:absolute;top:12px;right:12px;width:90px;height:55px;object-fit:contain;background:transparent;pointer-events:none;}
+.details.has-product-logo>.line,.details.has-product-logo>.code{padding-right:115px;overflow-wrap:anywhere;}
