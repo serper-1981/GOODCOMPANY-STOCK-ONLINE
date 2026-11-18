@@ -7,7 +7,7 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const ORIGIN = 'https://pedidosgoodcompany.com.ar';
 const PORT = Number(process.env.PORT || 3100);
-const CACHE_MS = 15 * 60 * 1000;
+const CACHE_MS = 5 * 60 * 1000;
 const MANUAL_COOLDOWN_MS = 60 * 1000;
 let lastManualRequest = 0;
 let syncState = {running:false,startedAt:null,finishedAt:null,success:null,trigger:null,nextScheduledAt:null};
@@ -150,26 +150,27 @@ async function getPage(route) {
   return cheerio.load(html);
 }
 
-function cardList($) {
-  const out = [];
-  $('.product.product-7').each((_, node) => {
-    const el = $(node);
-    const href = el.find('figure a[href*="/productos/detalle/"]').first().attr('href');
-    const code = el.find('.product-title').first().text().trim();
-    if (!href || !code) return; // Admitir nombres de ofertas: '2264 30% OFF', 'LM1122 20% OFF', etc.
-    out.push({ code, href, category: el.find('.product-cat').first().text().trim(), image: abs(el.find('img.product-image').first().attr('src')) });
-  });
-  return out;
+function auditCode(value) {
+  // El descuento forma parte del nombre comercial, no del código del artículo.
+  return normalizeCode(value).replace(/\s+\d+(?:[.,]\d+)?\s*%\s*OFF\b.*$/i, '').trim();
 }
-// Comprobación pública completa: recorrer todas las páginas de /productos.
-// Nunca declarar faltantes cuando una página no se puede leer o el total no coincide.
+function cardList($) {
+  const cards=[];
+  $('.product.product-7').each((_,node)=>{
+    const el=$(node);
+    const href=el.find('figure a[href*="/productos/detalle/"]').first().attr('href')||'';
+    const raw=el.find('.product-title').first().text().replace(/\s+/g,' ').trim();
+    cards.push({raw,href,code:auditCode(raw)});
+  });
+  return cards;
+}
 async function checkSalesListing(allowed) {
-  const codes=new Set(), visited=new Set(), queue=['/productos/todos'], pages=[];
-  const examples=[];
-  let expected=null;
+  const codes=new Map(), visited=new Set(), pages=[], unidentified=[];
+  const queue=['/productos/todos/1','/productos/todos/2','/productos/todos/3'];
+  let expected=null, issue=null;
   const checkedAt=new Date().toISOString();
-  let issue=null;
-  while(queue.length && pages.length<60){
+  // Solo paginación general. Nunca recorrer filtros por color: repiten artículos.
+  while(queue.length && pages.length<30){
     const route=queue.shift();
     if(visited.has(route))continue;
     visited.add(route);
@@ -177,17 +178,17 @@ async function checkSalesListing(allowed) {
     try{$=await getPage(route)}catch(e){issue=`Error al leer ${route}: ${e.message}`;break}
     const cards=cardList($);
     if(!cards.length){issue=`Sin tarjetas reconocibles en ${route}`;break}
-    if(route==='/productos/todos'){
-      const body=$('body').text().replace(/\s+/g,' ');
-      const match=body.match(/Mostrando\s+\d+\s+de\s+(\d+)\s+productos/i)
-        ||body.match(/(?:Total(?:\s+de)?\s+productos|Productos\s+encontrados)\s*:?\s*(\d+)/i);
-      if(match)expected=Number(match[1]);
-    }
+    const body=$('body').text().replace(/\s+/g,' ');
+    const match=body.match(/Mostrando\s+\d+\s+de\s+(\d+)\s+productos/i)
+      ||body.match(/(?:Total(?:\s+de)?\s+productos|Productos\s+encontrados)\s*:?\s*(\d+)/i);
+    if(match)expected=Number(match[1]);
     let added=0;
     for(const card of cards){
-      const code=normalizeCode(card.code).replace(/\s+\d+%\s*OFF.*$/i,'');
-      if(code&&!codes.has(code)){codes.add(code);added++}
-      if(examples.length<12)examples.push({code,route});
+      if(!card.raw||!card.href||!card.code){
+        unidentified.push({page:route,title:card.raw||'(sin título)',href:card.href||'',reason:'Tarjeta sin título, código o enlace'});
+        continue;
+      }
+      if(!codes.has(card.code)){codes.set(card.code,{title:card.raw,href:card.href,page:route});added++}
     }
     pages.push({route,items:cards.length,newCodes:added});
     $('a[href]').each((_,el)=>{
@@ -195,22 +196,31 @@ async function checkSalesListing(allowed) {
       let u;
       try{u=new URL(href,ORIGIN)}catch{return}
       if(u.origin!==new URL(ORIGIN).origin)return;
-      if(!/^\/productos\/todos(?:\/\d+)?\/?$/i.test(u.pathname))return;
-      const next=u.pathname.replace(/\/$/,'')+u.search;
+      if(!/^\/productos\/todos(?:\/\d+)?\/?$/i.test(u.pathname) || u.search)return;
+      const next=u.pathname.replace(/\/$/,'');
       if(!visited.has(next)&&!queue.includes(next))queue.push(next);
     });
-    if(expected!==null && codes.size>=expected)break;
+    if(expected!==null && codes.size>=expected && unidentified.length===0)break;
   }
-  const missing=[...allowed.keys()].filter(code=>!codes.has(code)).sort((a,b)=>a.localeCompare(b,'es',{numeric:true}));
-  const complete=!issue&&expected!==null&&codes.size===expected;
-  const reason=issue||(expected===null?'La web no informó un total general verificable.':
-    codes.size!==expected?`Se recuperaron ${codes.size} códigos únicos de ${expected} productos informados; faltan ${Math.max(0,expected-codes.size)} por identificar en el listado.`:null);
+  const sort=(a,b)=>a.localeCompare(b,'es',{numeric:true});
+  // Normalizar ambos lados; preservar el código original del catálogo para mostrarlo.
+  const reference=[...allowed.keys()].map(original=>({original,canonical:auditCode(original)})).sort((a,b)=>sort(a.canonical,b.canonical));
+  const matched=reference.filter(x=>codes.has(x.canonical));
+  const absent=reference.filter(x=>!codes.has(x.canonical));
+  const complete=!issue&&expected!==null&&codes.size===expected&&unidentified.length===0;
+  const note=issue||(expected===null?'No se obtuvo un total verificable del catálogo de ventas.':
+    !complete?`Ventas informa ${expected} productos, pero se identificaron ${codes.size} códigos únicos. No es seguro declarar ausencias.`:
+    'Se identificaron todos los productos informados por ventas.');
+  const detail=x=>({code:x.original,canonicalCode:x.canonical,referenceStatus:'STOCK SI',salesStatus:codes.has(x.canonical)?'ENCONTRADO':complete?'NO ENCONTRADO':'NO VERIFICADO',salesTitle:codes.get(x.canonical)?.title||null,salesUrl:codes.get(x.canonical)?.href||null});
   return {
     status:complete?'verificado':'incompleto',checkedAt,publicCount:codes.size,
     expectedPublicCount:expected,pagesChecked:pages.length,pages,
-    missingFromSales:complete?missing:[],possibleMissingFromSales:complete?[]:missing,
-    note:complete?'Comparación completa de ADMIN STOCK=SI contra /productos/todos.':reason,
-    warning:complete?null:'Los posibles faltantes NO están confirmados: el listado de ventas no se recuperó completamente. No modificar ADMIN basándose sólo en esta lista.'
+    matchCount:matched.length,matchedArticles:matched.map(detail),
+    missingArticles:complete?absent.map(detail):[],
+    unverifiedArticles:complete?[]:absent.map(detail),
+    unidentifiedSalesProducts:unidentified,repeatedSalesCodes:[],
+    missingFromSales:complete?absent.map(x=>x.original):[],possibleMissingFromSales:complete?[]:absent.map(x=>x.original),
+    note,warning:complete?null:'Lectura incompleta: los artículos no encontrados son NO VERIFICADOS, no faltantes confirmados.'
   };
 }
 
@@ -503,6 +513,9 @@ async function load() {
 
   // Sin dependencia del listado público: cada artículo proviene del MASTER.
   const jobs = [...allowed].map(([code,ids]) => ({code,id:ids.id,editId:ids.editId,category:ids.category,motivo:ids.motivo,old:retained.get(code)}));
+  // Tres trabajadores simultáneos: reduce el tiempo de sincronización sin
+  // saturar el panel administrativo con demasiadas consultas concurrentes.
+  const workers = 3;
   let cursor=0;
   async function worker() {
     while (cursor < jobs.length) {
@@ -551,10 +564,10 @@ async function load() {
       } catch (e) {
         failures.push('Artículo '+code+': '+e.message);
       }
-      await sleep(200);
+      await sleep(100);
     }
   }
-  await Promise.all([worker(),worker()]);
+  await Promise.all(Array.from({length:workers}, () => worker()));
   const changes=[];
   const fields=['image','price','description','measurements','offerPrices','category','line','colors','colorImages'];
   for(const [code,item] of retained){
@@ -606,7 +619,7 @@ async function refresh(trigger="automatica") {
       // La web de ventas puede fallar o demorar; no afecta el resultado de ADMIN.
       lastDiagnostic.salesCheck={status:"pendiente",checkedAt:new Date().toISOString(),note:"Comprobando el listado de ventas después de guardar el catálogo."};
       saveDiagnostic();
-      void (async()=>{
+      if(process.env.GC_AUDIT_ONLY!=='1')void (async()=>{
         try{
           const allowed=new Map(next.products.map(p=>[normalizeCode(p.code),true]));
           lastDiagnostic.salesCheck=await checkSalesListing(allowed);
@@ -657,7 +670,7 @@ function startBackgroundRefresh(trigger='automatica') {
   void refresh(trigger).catch(err=>console.error('[STOCK] Actualización:',err));
   return true;
 }
-setImmediate(()=>startBackgroundRefresh('inicio'));
+if(process.env.GC_AUDIT_ONLY!=='1')setImmediate(()=>startBackgroundRefresh('inicio'));
 
 
 // Informe de impresión A4: exclusivamente artículo y colores disponibles.
@@ -721,12 +734,41 @@ function printColorsHtml(products) {
   .color-cell{font-size:13px;font-weight:700;word-break:normal;hyphens:auto}
   @media print{body{padding:0}.toolbar{display:none}.imported-start{break-before:page;page-break-before:always}h2,th{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
-  </style></head><body><div class="toolbar"><button onclick="window.print()">IMPRIMIR A4 VERTICAL</button><button onclick="window.close()">Cerrar</button></div><img class="print-logo" src="https://raw.githubusercontent.com/serper-1981/LOGOS/9c6587df170a9f27634b3ba05e01eabc4de636a2/NUEVO%20LOGO%20GC.png" alt="GOOD COMPANY"><p class="sub">ARTÍCULOS Y COLORES DISPONIBLES · ${products.length} artículos · ${new Date().toLocaleDateString('es-AR')}</p>${sections}</body></html>`;
+  </style></head><body><div class="toolbar"><button onclick="window.print()">IMPRIMIR A4 VERTICAL</button><button onclick="window.close()">Cerrar</button></div><img class="print-logo" src="https://raw.githubusercontent.com/serpereyra1981-GC/LOGOS/9c6587df170a9f27634b3ba05e01eabc4de636a2/NUEVO%20LOGO%20GC.png" alt="GOOD COMPANY"><p class="sub">ARTÍCULOS Y COLORES DISPONIBLES · ${products.length} artículos · ${new Date().toLocaleDateString('es-AR')}</p>${sections}</body></html>`;
 }
 
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png' };
 http.createServer(async (req, res) => {
   const pathname = new URL(req.url, 'http://localhost').pathname;
+  if (pathname === '/api/auditoria-ventas-ejecutar') {
+    const remote=req.socket.remoteAddress||'';
+    if(process.env.GC_AUDIT_ONLY!=='1'||req.method!=='POST'||!['127.0.0.1','::1','::ffff:127.0.0.1'].includes(remote)){
+      res.writeHead(403);return res.end('No autorizado');
+    }
+    try{
+      // Usar únicamente el catálogo publicado y entregado por el proceso de comparación.
+      // Nunca volver a consultar ADMIN MASTER desde esta auditoría.
+      const chunks=[];
+      for await (const chunk of req) {
+        chunks.push(chunk);
+        if (Buffer.concat(chunks).length > 200000) throw Error('Solicitud demasiado grande');
+      }
+      const payload=JSON.parse(Buffer.concat(chunks).toString('utf8')||'{}');
+      if (!Array.isArray(payload.codes) || !payload.codes.length || payload.codes.length > 10000) throw Error('Catálogo publicado inválido');
+      const allowed=new Map(payload.codes.map(code=>[normalizeCode(code),true]).filter(([code])=>Boolean(code)));
+      const result=await checkSalesListing(allowed);
+      result.catalogUpdatedAt=payload.updatedAt||null;
+      result.source='catalogo-publicado-cloudflare';
+      result.adminStockSi=allowed.size;
+      // El recuento de coincidencias verificadas se calcula en checkSalesListing.
+      result.adminCodes=[...allowed.keys()].sort((a,b)=>a.localeCompare(b,'es',{numeric:true}));
+      res.writeHead(200,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});
+      return res.end(JSON.stringify(result));
+    }catch(e){
+      res.writeHead(500,{'Content-Type':'application/json; charset=utf-8'});
+      return res.end(JSON.stringify({status:'error',note:e.message,checkedAt:new Date().toISOString(),missingFromSales:[]}));
+    }
+  }
   if (pathname === '/informe-colores') {
     if (req.method !== 'GET') {res.writeHead(405,{'Allow':'GET'});return res.end('Método no permitido');}
     if (!cache.products.length) {res.writeHead(503,{'Content-Type':'text/plain; charset=utf-8'});return res.end('No hay artículos cargados para imprimir.');}
